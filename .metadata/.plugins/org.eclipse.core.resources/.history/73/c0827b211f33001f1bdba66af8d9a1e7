@@ -1,0 +1,49 @@
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurirtyConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private Datasource datasource;
+	
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return new CustomUserDetailsService();
+	}
+	
+	@Bean
+	public BCryptoPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public DaoAthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthnticationProvider();
+		authProvider.setUserDetailsService(userDetailsService());
+		authProvider.setPasswordEncoder(passwordEncoder());
+		
+		return authProvider;
+	}
+	
+	@Override
+	protected void configure(AuthentificationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(authenticationProvider());
+	}
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+			.antMatchers("/list_users").authenticated()
+			.anyRequest().permitAll()
+			.and()
+			.formLogin()
+				.usernameParameter("email")
+				.defaultSucessUrl("/list_users")
+				.permitAll
+			.and()
+			.logout().logoutSucessUrl("/").permitAll;
+	}
+	
+}

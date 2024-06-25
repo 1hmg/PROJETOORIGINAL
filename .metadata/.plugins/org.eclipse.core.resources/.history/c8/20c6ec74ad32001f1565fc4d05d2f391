@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<link>
+		<meta charset="ISO-8859-1">
+		<title>Home</title>
+		<link rel="stylesheet" type="text/css" href="webjars/bootstrap/css/boostrap.min.css" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Welcome</h1>
+		</div>
+		
+	</body>
+</html>
